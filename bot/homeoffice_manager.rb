@@ -22,7 +22,7 @@ module HomeofficeManager
         client.say(text: "*#{date.to_date}* z domu pracują: #{home_people_names}", channel: data.channel)
         client.say(text: "W biurze *powinni być*: #{office_people_names}, inaczej wpierdziel", channel: data.channel)
       else
-        client.say('text': "*#{date.to_date}* wszyscy są w biurze! (taa...)", channel: data.channel)
+        client.say(text: "*#{date.to_date}* wszyscy są w biurze! (taa...)", channel: data.channel)
       end
     end
 

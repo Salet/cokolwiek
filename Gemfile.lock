@@ -92,6 +92,3 @@ DEPENDENCIES
   chronic
   pry
   slack-ruby-bot
-
-BUNDLED WITH
-   1.12.5
