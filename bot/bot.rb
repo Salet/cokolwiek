@@ -1,6 +1,8 @@
 require 'slack-ruby-bot'
 require_relative 'holidays_manager'
 require_relative 'homeoffice_manager'
+require_relative 'events_manager'
+require_relative 'planning_manager'
 
 class PongBot < SlackRubyBot::Bot
   command 'help' do |client, data, match|
@@ -26,6 +28,8 @@ class PongBot < SlackRubyBot::Bot
 
   include HolidaysManager
   include HomeofficeManager
+  include EventManager
+  include PlanningManager
 
   def self.admin(client)
     @@admin_id ||= client.users.find { |_k, v| v['name'] == 'wojtek' }.first
