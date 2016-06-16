@@ -1,36 +1,23 @@
 require 'slack-ruby-bot'
-require 'pry'
-require 'chronic'
+require_relative 'holidays_manager'
+require_relative 'homeoffice_manager'
 
 class PongBot < SlackRubyBot::Bot
-  HOMEOFFICE = {}
-  IGNORED = ['USLACKBOT']
+  include HolidaysManager
+  include HomeofficeManager
 
-  command 'homeoffice check', 'homeoffice who' do |client, data, match|
-    client.say(text: "Najpierw podaj datę!", channel: data.channel) if match['expression'].nil?
-
-    date = Chronic.parse(match['expression'])
-    home_people = HOMEOFFICE[date].to_a
-    office_people = client.users.select{ |k, v| v["is_bot"] == false }.keys - IGNORED - home_people
-
-    if home_people.any?
-      home_people_names = home_people.map { |person| "<@#{person}>"}.join(', ')
-      office_people_names = office_people.map { |person| "<@#{person}>"}.join(', ')
-      client.say(text: "#{date.to_date} z domu pracują: #{home_people_names}", channel: data.channel)
-      client.say(text: "W biurze powinni być: #{office_people_names}, inaczej wpierdziel", channel: data.channel)
-    else
-      client.say('text': "#{date.to_date} wszyscy są w biurze! (taa...)", channel: data.channel)
-    end
+  def self.admin(client)
+    @@admin_id ||= client.users.find { |_k, v| v['name'] == 'wojtek' }.first
   end
 
-  command 'homeoffice at', 'homeoffice', 'homeoffice add' do |client, data, match|
-    client.say(text: "Najpierw podaj datę!", channel: data.channel) if match['expression'].nil?
-
-    date = Chronic.parse(match['expression'])
-    HOMEOFFICE[date] = [] if HOMEOFFICE[date].blank?
-    HOMEOFFICE[date] << data.user unless HOMEOFFICE[date].include?(data.user)
-    client.say(text: "#{date.to_date} pracujesz z domu!", channel: data.channel)
+  def self.admin_im(client)
+    @@admin_im ||= client.ims.find { |_k, v| v['user'] == admin(client) }.first
   end
+
+  def self.user_im(user_id, client)
+    client.ims.find { |_k, v| v['user'] == user_id }.first
+  end
+
 end
 
 PongBot.run
