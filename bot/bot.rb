@@ -26,6 +26,24 @@ class PongBot < SlackRubyBot::Bot
 
         homeoffice at, homeoffice, homeoffice add
           Sets you as working from home on a given date
+
+      Events
+        check what events are planned and add new ones
+
+        events
+          list all upcoming events
+
+      Planning
+        vote for next thing to do
+
+        planning start, planning restart
+          starts a round of voting
+
+        vote
+          adds a vote for given option
+
+        planning stop, planning end, planning finish
+          stops a round of voting and shows the resoults
           ',channel: data.channel)
   end
 

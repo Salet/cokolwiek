@@ -20,10 +20,12 @@ module EventManager
     end
 
     command 'add event' do |client, data, match|
-      values = match['expression'].split('|')
-      keys = [:name, :description, :link]
-      @@events << Hash[*keys.zip(values).flatten]
-      client.say(text: "Event added", channel: data.channel)
+      if data.user == admin(client)
+        values = match['expression'].split('|')
+        keys = [:name, :description, :link]
+        @@events << Hash[*keys.zip(values).flatten]
+        client.say(text: "Event added", channel: data.channel)
+      end
     end
   end
 end
